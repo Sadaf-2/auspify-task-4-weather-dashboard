@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="SkyCast professional weather dashboard with current weather, hourly forecast and 5-day forecast."
+    >
+
+    <title>SkyCast - Weather Dashboard</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="background-glow glow-one"></div>
+    <div class="background-glow glow-two"></div>
+
+    <!-- HEADER -->
+    <header class="top-header">
+        <div class="container header-content">
+
+            <a href="#" class="logo">
+                <span class="logo-icon">
+                    <i data-lucide="cloud-sun"></i>
+                </span>
+                <span>SkyCast</span>
+            </a>
+
+            <div class="header-actions">
+
+                <button id="unitToggle" class="header-btn">
+                    <i data-lucide="thermometer"></i>
+                    <span>°C / °F</span>
+                </button>
+
+                <button id="locationBtn" class="header-btn location-btn">
+                    <i data-lucide="map-pin"></i>
+                    <span>My Location</span>
+                </button>
+
+            </div>
+
+        </div>
+    </header>
+
+
+    <!-- MAIN -->
+    <main class="container main-content">
+
+        <!-- SEARCH -->
+        <section class="search-section">
+
+            <div class="intro">
+
+                <span class="eyebrow">
+                    WEATHER DASHBOARD
+                </span>
+
+                <h1>
+                    Know your weather,
+                    <span>plan your day.</span>
+                </h1>
+
+                <p>
+                    Search any city to explore current conditions,
+                    hourly weather and the upcoming 5-day forecast.
+                </p>
+
+            </div>
+
+
+            <form id="searchForm" class="search-box">
+
+                <div class="search-input-wrapper">
+
+                    <i data-lucide="search" class="search-icon"></i>
+
+                    <input
+                        type="text"
+                        id="cityInput"
+                        placeholder="Search for a city..."
+                        autocomplete="off"
+                        required
+                    >
+
+                </div>
+
+                <button type="submit" class="search-btn">
+                    Search
+                </button>
+
+            </form>
+
+
+            <!-- RECENT SEARCHES -->
+            <div class="recent-section" id="recentSection">
+
+                <div class="recent-heading">
+
+                    <span>Recent searches</span>
+
+                    <button id="clearRecent">
+                        Clear
+                    </button>
+
+                </div>
+
+                <div id="recentSearches" class="recent-list"></div>
+
+            </div>
+
+        </section>
+
+
+        <!-- LOADING -->
+        <div id="loadingState" class="state-card hidden">
+
+            <div class="loader"></div>
+
+            <h3>Getting weather data...</h3>
+
+            <p>
+                Please wait while we check the latest weather.
+            </p>
+
+        </div>
+
+
+        <!-- ERROR -->
+        <div id="errorState" class="state-card error-state hidden">
+
+            <div class="state-icon">
+                <i data-lucide="triangle-alert"></i>
+            </div>
+
+            <h3 id="errorTitle">
+                Something went wrong
+            </h3>
+
+            <p id="errorMessage">
+                We couldn't find the requested weather information.
+            </p>
+
+            <button id="retryBtn" class="retry-btn">
+                Try Again
+            </button>
+
+        </div>
+
+
+        <!-- WEATHER DASHBOARD -->
+        <section id="weatherDashboard" class="weather-dashboard hidden">
+
+
+            <!-- CURRENT + DETAILS -->
+            <div class="dashboard-grid">
+
+
+                <!-- CURRENT WEATHER -->
+                <article class="current-weather weather-card">
+
+                    <div class="weather-top">
+
+                        <div>
+
+                            <span class="card-label">
+                                CURRENT WEATHER
+                            </span>
+
+                            <h2 id="cityName">
+                                Islamabad
+                            </h2>
+
+                            <p id="weatherDate">
+                                Monday, October 3
+                            </p>
+
+                        </div>
+
+
+                        <button
+                            id="favoriteBtn"
+                            class="favorite-btn"
+                            title="Add to favorites"
+                        >
+                            <i data-lucide="star"></i>
+                        </button>
+
+                    </div>
+
+
+                    <div class="temperature-area">
+
+                        <div id="weatherIcon" class="weather-icon">
+                            <i data-lucide="sun"></i>
+                        </div>
+
+
+                        <div class="temperature">
+
+                            <span id="temperature">
+                                24
+                            </span>
+
+                            <sup>°</sup>
+
+                        </div>
+
+
+                        <div class="temperature-details">
+
+                            <h3 id="weatherCondition">
+                                Clear Sky
+                            </h3>
+
+                            <p>
+                                Feels like
+                                <strong id="feelsLike">
+                                    25°
+                                </strong>
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="min-max">
+
+                        <div>
+                            <i data-lucide="arrow-down"></i>
+
+                            <strong id="minTemp">
+                                18°
+                            </strong>
+
+                            <small>
+                                Low
+                            </small>
+                        </div>
+
+
+                        <div>
+                            <i data-lucide="arrow-up"></i>
+
+                            <strong id="maxTemp">
+                                28°
+                            </strong>
+
+                            <small>
+                                High
+                            </small>
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+                <!-- WEATHER DETAILS -->
+                <article class="weather-card details-card">
+
+                    <div class="card-heading">
+
+                        <div>
+
+                            <span class="card-label">
+                                WEATHER DETAILS
+                            </span>
+
+                            <h3>
+                                Today's conditions
+                            </h3>
+
+                        </div>
+
+                        <i
+                            data-lucide="activity"
+                            class="detail-icon"
+                        ></i>
+
+                    </div>
+
+
+                    <div class="details-grid">
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-symbol">
+                                <i data-lucide="droplets"></i>
+                            </span>
+
+                            <div>
+                                <small>Humidity</small>
+                                <strong id="humidity">65%</strong>
+                            </div>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-symbol">
+                                <i data-lucide="wind"></i>
+                            </span>
+
+                            <div>
+                                <small>Wind Speed</small>
+                                <strong id="windSpeed">
+                                    12 km/h
+                                </strong>
+                            </div>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-symbol">
+                                <i data-lucide="compass"></i>
+                            </span>
+
+                            <div>
+                                <small>Wind Direction</small>
+                                <strong id="windDirection">
+                                    NW
+                                </strong>
+                            </div>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-symbol">
+                                <i data-lucide="eye"></i>
+                            </span>
+
+                            <div>
+                                <small>Visibility</small>
+                                <strong id="visibility">
+                                    10 km
+                                </strong>
+                            </div>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-symbol">
+                                <i data-lucide="gauge"></i>
+                            </span>
+
+                            <div>
+                                <small>Pressure</small>
+                                <strong id="pressure">
+                                    1015 hPa
+                                </strong>
+                            </div>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-symbol">
+                                <i data-lucide="cloud"></i>
+                            </span>
+
+                            <div>
+                                <small>Cloudiness</small>
+                                <strong id="cloudiness">
+                                    20%
+                                </strong>
+                            </div>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-symbol">
+                                <i data-lucide="sun-medium"></i>
+                            </span>
+
+                            <div>
+                                <small>UV Index</small>
+                                <strong id="uvIndex">
+                                    5
+                                </strong>
+                            </div>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-symbol">
+                                <i data-lucide="cloud-rain"></i>
+                            </span>
+
+                            <div>
+                                <small>Precipitation</small>
+                                <strong id="precipitation">
+                                    0 mm
+                                </strong>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+
+            <!-- SUN -->
+            <section class="weather-card sun-card">
+
+                <div class="section-title">
+
+                    <div>
+
+                        <span class="card-label">
+                            SUN & TIME
+                        </span>
+
+                        <h3>
+                            Daylight information
+                        </h3>
+
+                    </div>
+
+                    <i
+                        data-lucide="sun"
+                        class="section-symbol"
+                    ></i>
+
+                </div>
+
+
+                <div class="sun-grid">
+
+
+                    <div class="sun-item">
+
+                        <span class="sun-icon">
+                            <i data-lucide="sunrise"></i>
+                        </span>
+
+                        <div>
+
+                            <small>Sunrise</small>
+
+                            <strong id="sunrise">
+                                6:12 AM
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="sun-progress">
+
+                        <div class="sun-line">
+
+                            <span id="sunProgress"></span>
+
+                        </div>
+
+                        <div class="sun-labels">
+
+                            <span>
+                                Sunrise
+                            </span>
+
+                            <span id="localTime">
+                                12:30 PM
+                            </span>
+
+                            <span>
+                                Sunset
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="sun-item sunset-item">
+
+                        <span class="sun-icon">
+                            <i data-lucide="sunset"></i>
+                        </span>
+
+                        <div>
+
+                            <small>Sunset</small>
+
+                            <strong id="sunset">
+                                5:42 PM
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- HOURLY -->
+            <section class="weather-card forecast-card">
+
+                <div class="section-title">
+
+                    <div>
+
+                        <span class="card-label">
+                            HOURLY FORECAST
+                        </span>
+
+                        <h3>
+                            Next hours
+                        </h3>
+
+                    </div>
+
+                    <i
+                        data-lucide="clock-3"
+                        class="section-symbol"
+                    ></i>
+
+                </div>
+
+
+                <div
+                    id="hourlyForecast"
+                    class="hourly-list"
+                ></div>
+
+            </section>
+
+
+            <!-- DAILY -->
+            <section class="weather-card forecast-card">
+
+                <div class="section-title">
+
+                    <div>
+
+                        <span class="card-label">
+                            5-DAY FORECAST
+                        </span>
+
+                        <h3>
+                            Plan ahead
+                        </h3>
+
+                    </div>
+
+                    <i
+                        data-lucide="calendar-days"
+                        class="section-symbol"
+                    ></i>
+
+                </div>
+
+
+                <div
+                    id="dailyForecast"
+                    class="daily-list"
+                ></div>
+
+            </section>
+
+
+            <!-- FAVORITES -->
+            <section class="weather-card favorites-card">
+
+                <div class="section-title">
+
+                    <div>
+
+                        <span class="card-label">
+                            FAVORITES
+                        </span>
+
+                        <h3>
+                            Your saved cities
+                        </h3>
+
+                    </div>
+
+                    <i
+                        data-lucide="star"
+                        class="section-symbol"
+                    ></i>
+
+                </div>
+
+
+                <div
+                    id="favoritesList"
+                    class="favorites-list"
+                >
+
+                    <p class="no-favorites">
+                        No favorite cities yet.
+                    </p>
+
+                </div>
+
+            </section>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer class="footer">
+
+        <div class="container footer-content">
+
+            <div>
+
+                <strong>SkyCast</strong>
+
+                <span>
+                    Weather Dashboard
+                </span>
+
+            </div>
+
+            <p>
+                Built with HTML, CSS & JavaScript
+            </p>
+
+        </div>
+
+    </footer>
+
+
+    <!-- TOAST -->
+    <div id="toast" class="toast">
+
+        <i data-lucide="check-circle"></i>
+
+        <span id="toastMessage">
+            Saved successfully
+        </span>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+    <script>
+        lucide.createIcons();
+    </script>
+
+</body>
+</html>
